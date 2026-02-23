@@ -104,7 +104,7 @@ export default async function ToolDetailPage({ params }: Props) {
                     <div className="flex items-center gap-6 p-5 rounded-2xl bg-[#b026ff]/10 border border-[#b026ff]/30">
                         <div className="flex flex-col">
                             <span className="text-sm text-gray-400 font-semibold mb-1">에디터의 한줄평</span>
-                            <span className="text-white font-bold">"{tool.pikis_pick}"</span>
+                            <span className="text-white font-bold">&quot;{tool.pikis_pick}&quot;</span>
                         </div>
                         <div className="ml-auto text-right">
                             <span className="text-2xl font-black text-[#ffcc00]">★ {tool.average_rating}</span>
