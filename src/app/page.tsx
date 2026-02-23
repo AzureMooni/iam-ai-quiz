@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BrainCircuit, Share2, Sparkles, ExternalLink } from "lucide-react";
+import { BrainCircuit, Share2, Sparkles } from "lucide-react";
 
 const questions = [
   {
@@ -61,12 +61,24 @@ export default function Home() {
   }, [isLoading]);
 
   const handleShare = async () => {
-    try {
-      await navigator.clipboard.writeText("https://iam-ai.kr");
-      setToastMessage("링크 복사완료!");
-      setTimeout(() => setToastMessage(null), 2500);
-    } catch (err) {
-      console.error("Failed to copy", err);
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "I AM AI - 직장 생존 계급 테스트",
+          text: "나의 직장 생존 계급은? 충격적인 팩폭 결과를 확인하세요.",
+          url: "https://iam-ai.kr",
+        });
+      } catch (err) {
+        console.error("Share failed", err);
+      }
+    } else {
+      try {
+        await navigator.clipboard.writeText("https://iam-ai.kr");
+        setToastMessage("링크 복사완료!");
+        setTimeout(() => setToastMessage(null), 2500);
+      } catch (err) {
+        console.error("Failed to copy", err);
+      }
     }
   };
 
@@ -74,26 +86,46 @@ export default function Home() {
   const currentQuestion = questions[currentQuestionIndex];
 
   // Result Setup
+  let resultEmoji = "";
   let resultTitle = "";
+  let dangerGaugeText = "";
+  let dangerGaugePercent = 0;
+  let hashtags = "";
   let resultBody = "";
   let resultColorClass = "";
-  let iconBgClass = "";
+  let borderClass = "";
+  let gaugeColorClass = "";
 
   if (score <= 10) {
-    resultTitle = "🚨 삐빅- 당신은 [구석기시대 엑셀 원시인]입니다.";
-    resultBody = "동기들은 AI 치트키 쓰고 3시간 일찍 퇴근하는데, 혼자 돌도끼를 들고 계시네요. 당장 생존 무기 장착이 시급합니다!";
+    resultEmoji = "🗿";
+    resultTitle = "엑셀 깎는 노인";
+    dangerGaugeText = "도태 위험도 99%";
+    dangerGaugePercent = 99;
+    hashtags = "#Ctrl_C_V_장인 #수동야근 #노안의주범";
+    resultBody = "동기들이 AI 비서 시켜서 30분 만에 끝낼 일, 3시간째 눈알 빠지게 엑셀 셀 병합하고 계시네요. 'AI 그거 다 한때야'라며 외면하지만, 사실 조금 쫄려하고 있습니다.";
     resultColorClass = "text-[#ff3366] neon-text-red drop-shadow-[0_0_8px_rgba(255,51,102,0.8)]";
-    iconBgClass = "border-[#ff3366] text-[#ff3366] shadow-[0_0_15px_rgba(255,51,102,0.5)]";
+    borderClass = "border-[#ff3366]/40";
+    gaugeColorClass = "bg-[#ff3366]";
   } else if (score === 20) {
-    resultTitle = "🦜 당신은 [어설픈 챗GPT 앵무새]입니다.";
-    resultBody = "남들이 좋다는 건 대충 써봤지만, 내 직무에 200% 활용은 못 하고 있습니다. 진짜 날카로운 무기를 찾을 때입니다.";
+    resultEmoji = "🦜";
+    resultTitle = "어설픈 챗GPT 앵무새";
+    dangerGaugeText = "도태 위험도 50%";
+    dangerGaugePercent = 50;
+    hashtags = "#프롬프트가뭐죠 #남들쓰니까씀 #복붙원툴";
+    resultBody = "유행어처럼 AI를 입에 달고 살지만, 정작 쓰는 건 '이거 요약해 줘'가 전부입니다. 엄청난 무기를 손에 쥐고도 망치질만 하고 있네요. 당신의 잠재력을 터뜨릴 1%의 디테일이 부족합니다.";
     resultColorClass = "text-[#ffcc00] neon-text-yellow drop-shadow-[0_0_8px_rgba(255,204,0,0.8)]";
-    iconBgClass = "border-[#ffcc00] text-[#ffcc00] shadow-[0_0_15px_rgba(255,204,0,0.5)]";
+    borderClass = "border-[#ffcc00]/40";
+    gaugeColorClass = "bg-[#ffcc00]";
   } else {
-    resultTitle = "👑 당신은 [AI 생태계의 최상위 포식자]입니다.";
-    resultBody = "이미 상위 1%의 생산성을 가지셨군요. 하지만 방심은 금물, 더 압도적인 격차를 벌릴 무기를 쥐어드릴게요.";
-    resultColorClass = "text-[#00f0ff] text-neon-cyan drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]";
-    iconBgClass = "border-[#00f0ff] text-[#00f0ff] shadow-[0_0_15px_rgba(0,240,255,0.5)]";
+    resultEmoji = "👑";
+    resultTitle = "생태계 파괴자";
+    dangerGaugeText = "도태 위험도 1% 미만";
+    dangerGaugePercent = 1;
+    hashtags = "#AI조련사 #광속퇴근 #숨은실력자";
+    resultBody = "이미 부서 내에서 '쟤는 일 언제 다 했어?'라는 소리를 듣는 1%의 에이스입니다. 하지만 기술은 매일 발전합니다. 여기서 만족하면 언제든 뒤처질 수 있습니다.";
+    resultColorClass = "text-[#00f0ff] neon-text-cyan drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]";
+    borderClass = "border-[#00f0ff]/40";
+    gaugeColorClass = "bg-[#00f0ff]";
   }
 
   // Right to Left Slide Animation
@@ -234,24 +266,67 @@ export default function Home() {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="flex flex-col items-center justify-center max-w-md w-full"
+            className="flex flex-col items-center justify-center max-w-sm w-full"
           >
-            {/* The Result Card */}
-            <div className="glass-panel w-full rounded-[2rem] p-8 sm:p-10 flex flex-col items-center text-center mb-6 relative overflow-hidden">
-              <div className={`mb-6 p-4 rounded-full border-2 bg-black/50 ${iconBgClass}`}>
-                <Sparkles className="w-8 h-8" />
+            {/* The Result Card (Digital ID Card) */}
+            <motion.div
+              whileHover={{ y: -5, rotateX: 2, rotateY: -2 }}
+              className={`glass-panel w-full rounded-3xl p-6 sm:p-8 flex flex-col items-center text-center mb-8 relative overflow-hidden border-2 ${borderClass} shadow-2xl backdrop-blur-xl`}
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              {/* Card Header ID */}
+              <div className="absolute top-0 left-0 w-full bg-black/40 py-2 border-b border-white/10 flex justify-center items-center gap-2">
+                <Sparkles className="w-4 h-4 text-gray-400" />
+                <span className="text-gray-400 text-xs font-bold tracking-[0.2em] uppercase">I AM AI - 직장 생존 신분증</span>
               </div>
 
+              {/* Avatar Emoji */}
+              <div className="mt-10 mb-4 text-[5rem] leading-none drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]">
+                {resultEmoji}
+              </div>
+
+              {/* Title / Tier */}
               <h1 className={`text-2xl sm:text-3xl font-black mb-6 leading-tight tracking-tight ${resultColorClass}`}>
                 {resultTitle}
               </h1>
 
-              <div className="bg-black/30 p-5 rounded-2xl border border-white/5 w-full">
-                <p className="text-gray-200 font-medium leading-relaxed text-[15px] sm:text-base">
-                  {resultBody}
-                </p>
+              {/* Danger Gauge */}
+              <div className="w-full bg-black/50 p-4 rounded-2xl border border-white/5 mb-6">
+                <div className="flex justify-between items-end mb-2">
+                  <span className="text-gray-300 font-bold text-sm">{dangerGaugeText}</span>
+                  <span className="text-xs text-gray-500 font-mono">{dangerGaugePercent}%</span>
+                </div>
+                <div className="w-full bg-gray-800/80 h-3 rounded-full overflow-hidden border border-white/5">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{ width: `${dangerGaugePercent}%` }}
+                    transition={{ duration: 1.5, delay: 0.5, ease: "easeOut" }}
+                    className={`h-full ${gaugeColorClass} shadow-[0_0_10px_currentColor]`}
+                  />
+                </div>
               </div>
-            </div>
+
+              {/* Hashtags */}
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                {hashtags.split(" ").map((tag, i) => (
+                  <span key={i} className="px-3 py-1 bg-white/5 border border-white/10 rounded-full text-xs font-bold text-gray-400 tracking-wide">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              {/* Fact-Bomb */}
+              <div className="w-full relative">
+                <div className="absolute -top-3 left-4 bg-[#1a1a1a] px-2 text-[10px] font-black tracking-widest text-red-500 uppercase border border-red-500/30 rounded-full">
+                  팩폭 Report
+                </div>
+                <div className="bg-black/40 pt-5 pb-4 px-4 rounded-2xl border border-white/10 w-full text-left">
+                  <p className="text-gray-200 font-medium leading-relaxed text-sm sm:text-[15px] whitespace-pre-line">
+                    &quot;{resultBody}&quot;
+                  </p>
+                </div>
+              </div>
+            </motion.div>
 
             {/* Stage 4: Conversion CTA */}
             <div className="w-full space-y-4">
@@ -259,11 +334,10 @@ export default function Home() {
                 href="https://piktai.com/ko"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-neon-primary animate-pulse-cyan w-full text-center py-5 rounded-2xl flex flex-col sm:flex-row items-center justify-center sm:gap-2 text-white font-black text-lg transition-transform hover:scale-[1.03] active:scale-[0.98] shadow-2xl"
+                className="btn-neon-primary animate-pulse-cyan w-full text-center py-5 rounded-2xl flex flex-col sm:flex-row items-center justify-center sm:gap-2 text-white font-black text-lg transition-transform hover:scale-[1.03] active:scale-[0.98] shadow-[0_0_30px_rgba(0,240,255,0.4)] border border-[#00f0ff]/50 bg-[#00f0ff]/10"
               >
-                <span>✨ 내 직업에 딱 맞는</span>
-                <span className="flex items-center gap-1">
-                  'AI 처방전' 무료로 받기 <ExternalLink className="w-5 h-5 opacity-80" />
+                <span className="flex items-center gap-2">
+                  🔒 나를 구원할 비밀 AI 무기 확인하기
                 </span>
               </a>
 
@@ -272,7 +346,7 @@ export default function Home() {
                 className="w-full flex items-center justify-center gap-2 p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/30 text-gray-300 font-bold transition-all active:scale-[0.98]"
               >
                 <Share2 className="w-5 h-5" />
-                📢 이 충격적인 결과 공유하기
+                📸 내 팩폭 결과 공유하기
               </button>
             </div>
           </motion.div>
