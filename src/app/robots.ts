@@ -7,6 +7,6 @@ export default function robots(): MetadataRoute.Robots {
             allow: '/',
             disallow: ['/api/', '/admin/'], // Protect internal routes
         },
-        sitemap: 'https://piktai.com/sitemap.xml',
+        sitemap: 'https://iam-ai.kr/sitemap.xml',
     };
 }

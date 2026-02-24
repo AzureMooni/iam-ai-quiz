@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getAllToolsForSitemap } from '@/lib/db';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://piktai.com';
+    const baseUrl = 'https://iam-ai.kr';
 
     // 1. Define Static Core Pages
     const staticPages: MetadataRoute.Sitemap = [
