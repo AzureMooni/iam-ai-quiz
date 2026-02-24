@@ -173,7 +173,7 @@ export default function Home() {
               나의 직장 생존 계급 테스트
             </h2>
             <p className="text-gray-300 text-base sm:text-lg mb-10 leading-relaxed font-medium break-keep px-2">
-              당신은 AI를 지배하는 포식자인가,<br className="sm:hidden" /> 대체될 원시인인가?<br />
+              당신은 AI를 지배하는 포식자인가,<br />대체될 원시인인가?<br />
               <span className="inline-block mt-2">10초 만에 확인하세요.</span>
             </p>
             <button
