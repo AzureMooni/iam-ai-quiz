@@ -19,6 +19,10 @@ body {
     radial-gradient(circle at 85% 30%, rgba(176, 38, 255, 0.1), transparent 30%);
   background-attachment: fixed;
   overflow-x: hidden;
+  word-break: keep-all;
+  /* Ensures Korean words aren't broken improperly */
+  overflow-wrap: break-word;
+  /* Allows long strings to break when absolutely necessary */
 }
 
 .glass-panel {
