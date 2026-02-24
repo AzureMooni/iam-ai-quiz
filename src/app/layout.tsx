@@ -16,7 +16,10 @@ export const metadata: Metadata = {
   title: "I AM AI 🤖 - 나의 직장 생존 지수 테스트",
   description: "당신은 AI를 지배할 것인가, 지배당할 것인가? 10초 만에 확인하세요.",
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico' }
+    ],
   },
 };
 
