@@ -172,9 +172,9 @@ export default function Home() {
             <h2 className="text-xl sm:text-2xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-[#00f0ff] to-[#b026ff]">
               나의 직장 생존 계급 테스트
             </h2>
-            <p className="text-gray-300 text-base sm:text-lg mb-10 leading-relaxed font-medium">
-              당신은 AI를 지배하는 포식자인가, 대체될 원시인인가?<br />
-              10초 만에 확인하세요.
+            <p className="text-gray-300 text-base sm:text-lg mb-10 leading-relaxed font-medium break-keep px-2">
+              당신은 AI를 지배하는 포식자인가,<br className="sm:hidden" /> 대체될 원시인인가?<br />
+              <span className="inline-block mt-2">10초 만에 확인하세요.</span>
             </p>
             <button
               onClick={handleStart}
